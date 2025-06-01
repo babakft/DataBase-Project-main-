@@ -321,7 +321,7 @@ const utils = {
 // Global error handler
 window.addEventListener('error', function(e) {
     console.error('Global error:', e.error);
-    showNotification('خطایی رخ داده است. لطفاً صفحه را تازه‌سازی کنید.', 'danger');
+    //showNotification('خطایی رخ داده است. لطفاً صفحه را تازه‌سازی کنید.', 'danger');
 });
 
 // Service Worker registration
