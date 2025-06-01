@@ -1,0 +1,335 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت نام دانشجویی</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="background-bullets">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<div class="container-fluid">
+    <div class="row min-vh-100">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+            <div class="square">
+                <i class="d-none d-lg-flex" style="--clr:#00ff0a;"></i>
+                <i class="d-none d-lg-flex" style="--clr:#ff0057;"></i>
+                <i class="d-none d-lg-flex" style="--clr:#fffd44;"></i>
+                
+                <div class="login" id="registrationApp">
+                    <h2 class="text-center mb-4">ثبت نام دانشجویی</h2>
+
+                    <form method="post" ref="registrationForm" @submit="handleSubmit">
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="inputBx">
+                                    <input type="text" 
+                                           name="student_name" 
+                                           v-model="formData.studentName"
+                                           placeholder="نام کامل" 
+                                           required>
+                                    {% if form.student_name.errors %}
+                                        <div class="text-danger">{{ form.student_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="inputBx">
+                                    <input type="email" 
+                                           name="email" 
+                                           v-model="formData.email"
+                                           placeholder="ایمیل" 
+                                           required>
+                                    {% if form.email.errors %}
+                                        <div class="text-danger">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-12">
+                                <div class="inputBx">
+                                    <input type="text" 
+                                           name="student_number" 
+                                           v-model="formData.studentNumber"
+                                           placeholder="شماره دانشجویی" 
+                                           required>
+                                    {% if form.student_number.errors %}
+                                        <div class="text-danger">{{ form.student_number.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6 col-12">
+                                <div class="inputBx">
+                                    <input type="password" 
+                                           name="password" 
+                                           v-model="formData.password"
+                                           placeholder="رمز عبور" 
+                                           required>
+                                    {% if form.password.errors %}
+                                        <div class="text-danger">{{ form.password.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="inputBx">
+                                    <input type="password" 
+                                           name="confirm_password" 
+                                           v-model="formData.confirmPassword"
+                                           placeholder="تایید رمز عبور" 
+                                           required>
+                                    {% if form.confirm_password.errors %}
+                                        <div class="text-danger">{{ form.confirm_password.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-3">
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="inputBx">
+                                    <input type="text" 
+                                           name="room_number" 
+                                           v-model="formData.roomNumber"
+                                           placeholder="شماره اتاق" 
+                                           required>
+                                    {% if form.room_number.errors %}
+                                        <div class="text-danger">{{ form.room_number.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="inputBx">
+                                    <input type="text" 
+                                           name="building_name" 
+                                           v-model="formData.buildingName"
+                                           placeholder="نام ساختمان" 
+                                           required>
+                                    {% if form.building_name.errors %}
+                                        <div class="text-danger">{{ form.building_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-12">
+                                <div class="inputBx">
+                                    <input type="number" 
+                                           name="floor_number" 
+                                           v-model="formData.floorNumber"
+                                           placeholder="طبقه" 
+                                           required>
+                                    {% if form.floor_number.errors %}
+                                        <div class="text-danger">{{ form.floor_number.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="inputBx mt-4">
+                            <input type="submit" value="ثبت نام">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-custom-dark text-white py-4">
+    <div class="container">
+        <div class="social-icons">
+            <div class="icon" data-tooltip="Instagram">
+                <a href="#"><img src="https://img.icons8.com/?size=100&id=59813&format=png&color=000000" alt="Instagram"></a>
+            </div>
+            <div class="icon" data-tooltip="GitHub">
+                <a href="https://github.com/Mbn64"><img src="https://img.icons8.com/?size=100&id=106562&format=png&color=000000" alt="GitHub"></a>
+            </div>
+        </div>
+        <p class="mb-0 mt-3">تمامی حقوق مادی و معنوی این وبسایت متعلق به دانشگاه شهید باهنر کرمان می‌باشد.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script>
+const app = new Vue({
+    el: '#registrationApp',
+    data() {
+        return {
+            formData: {
+                studentName: '',
+                studentNumber: '',
+                email: '',
+                password: '',
+                confirmPassword: '',
+                roomNumber: '',
+                buildingName: '',
+                floorNumber: ''
+            }
+        };
+    },
+    methods: {
+        handleSubmit(event) {
+            event.preventDefault(); // Always prevent default submission first
+            
+            // Validate the form
+            if (this.validateForm()) {
+                // If validation passes, submit the form
+                this.$refs.registrationForm.submit();
+            }
+        },
+
+        validateForm() {
+            // Check student name (Persian characters only)
+            const namePattern = /^[\u0600-\u06FF\s]+$/;
+            if (!this.formData.studentName.trim()) {
+                this.showError('نام کامل الزامی است.');
+                return false;
+            }
+            if (!namePattern.test(this.formData.studentName)) {
+                this.showError('نام کامل باید به زبان فارسی باشد.');
+                return false;
+            }
+            if (this.formData.studentName.trim().length < 2) {
+                this.showError('نام کامل باید حداقل ۲ کاراکتر باشد.');
+                return false;
+            }
+
+            // Check email format
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!this.formData.email.trim()) {
+                this.showError('ایمیل الزامی است.');
+                return false;
+            }
+            if (!emailPattern.test(this.formData.email)) {
+                this.showError('فرمت ایمیل صحیح نیست.');
+                return false;
+            }
+
+            // Check student number (8-9 digits only)
+            const studentNumberPattern = /^\d{8,9}$/;
+            if (!this.formData.studentNumber.trim()) {
+                this.showError('شماره دانشجویی الزامی است.');
+                return false;
+            }
+            if (!studentNumberPattern.test(this.formData.studentNumber)) {
+                this.showError('شماره دانشجویی باید فقط شامل ۸ یا ۹ رقم باشد.');
+                return false;
+            }
+
+            // Check password
+            if (!this.formData.password) {
+                this.showError('رمز عبور الزامی است.');
+                return false;
+            }
+            if (this.formData.password.length < 8) {
+                this.showError('رمز عبور باید حداقل ۸ کاراکتر باشد.');
+                return false;
+            }
+            const studentPassNumPattern = /^(?=.*\d)(?=.*[a-zA-Z]).*$/;
+            if (!studentPassNumPattern.test(this.formData.password)) {
+                this.showError('رمز عبور حداقل باید شامل یک عدد و یک حرف انگلیسی باشد.');
+                return false;
+            }
+            // Check password confirmation
+            if (!this.formData.confirmPassword) {
+                this.showError('تایید رمز عبور الزامی است.');
+                return false;
+            }
+            if (this.formData.password !== this.formData.confirmPassword) {
+                this.showError('رمز عبور و تایید رمز عبور مطابقت ندارند.');
+                return false;
+            }
+
+            // Check room number
+            const studentًRoomPattern = /^\d{3}$/;
+            if (!this.formData.roomNumber.trim()) {
+                this.showError('شماره اتاق الزامی است.');
+                return false;
+            }
+            if (!studentًRoomPattern.test(this.formData.roomNumber)) {
+                this.showError('شماره اتاق باید ۳ رقمی باشد.');
+                return false;
+            }
+            // Check building name (Persian characters)
+            const buildingPattern = /^[\u0600-\u06FF\s\d]+$/;
+            if (!this.formData.buildingName.trim()) {
+                this.showError('نام ساختمان الزامی است.');
+                return false;
+            }
+            if (!buildingPattern.test(this.formData.buildingName)) {
+                this.showError('نام ساختمان باید به زبان فارسی باشد.');
+                return false;
+            }
+
+            // Check floor number
+            if (!this.formData.floorNumber) {
+                this.showError('شماره طبقه الزامی است.');
+                return false;
+            }
+            const floor = parseInt(this.formData.floorNumber);
+            if (isNaN(floor) || floor < 0 || floor > 30) {
+                this.showError('شماره طبقه باید عددی بین ۰ تا ۳۰ باشد.');
+                return false;
+            }
+
+            // If all validations pass
+            return true;
+        },
+
+        showError(message) {
+            // Remove any existing overlay
+            this.closeMessageLog();
+            
+            // Create the overlay element
+            const overlay = document.createElement('div');
+            overlay.classList.add('message-overlay');
+            overlay.id = 'messageOverlay';
+            overlay.innerHTML = `
+                <div class="message-animated-border">
+                    <div class="message-log-content">
+                        <span class="message-log-icon">⚠️</span>
+                        <span class="message-log-text">${message}</span>
+                        <button type="button" class="message-log-close" onclick="closeMessageLog()">&times;</button>
+                    </div>
+                </div>
+            `;
+            
+            // Append the overlay to the body
+            document.body.appendChild(overlay);
+            
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+                this.closeMessageLog();
+            }, 5000);
+        },
+
+        closeMessageLog() {
+            const overlay = document.getElementById('messageOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+    }
+});
+
+// Global function for closing message (for onclick handler)
+function closeMessageLog() {
+    app.closeMessageLog();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

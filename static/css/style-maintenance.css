@@ -1,0 +1,352 @@
+/* Maintenance Form Specific Styles */
+.maintenance-form {
+    max-width: 900px !important;
+    width: 100%;
+}
+
+.form-header {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-info {
+    margin-top: 15px;
+}
+
+.user-name {
+    color: rgba(248, 250, 252, 0.9);
+    font-size: 0.95em;
+}
+
+.logout-btn {
+    color: #ff357a;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+.logout-btn:hover {
+    color: #ff6b9d;
+    text-decoration: underline;
+}
+
+.student-info-box {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.student-info-box h6 {
+    color: #f8fafc;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.info-grid div {
+    color: rgba(248, 250, 252, 0.9);
+    font-size: 0.95em;
+}
+
+.alert-message {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: #ff6b9d;
+    font-size: 0.95em;
+}
+
+.alert-message.alert-success {
+    background: rgba(25, 135, 84, 0.1);
+    border-color: rgba(25, 135, 84, 0.3);
+    color: #4ade80;
+}
+
+.alert-message.alert-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: rgba(255, 193, 7, 0.3);
+    color: #fbbf24;
+}
+
+/* Form Elements */
+.inputBx textarea {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    border-radius: 12px;
+    font-size: 1em;
+    color: #f8fafc;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'MyFont', sans-serif;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.inputBx textarea:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    background: rgba(30, 41, 59, 0.8) !important;
+}
+
+.inputBx textarea::placeholder {
+    color: rgba(203, 213, 225, 0.7);
+}
+
+.inputBx select {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    border-radius: 12px;
+    font-size: 1em;
+    color: #f8fafc;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'MyFont', sans-serif;
+    cursor: pointer;
+}
+
+.inputBx select:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    background: rgba(30, 41, 59, 0.8) !important;
+}
+
+.inputBx select option {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 10px;
+}
+
+.inputBx input[type="file"] {
+    width: 100%;
+    padding: 12px 20px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    border-radius: 12px;
+    font-size: 0.95em;
+    color: #f8fafc;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'MyFont', sans-serif;
+    cursor: pointer;
+}
+
+.inputBx input[type="file"]:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    background: rgba(30, 41, 59, 0.8) !important;
+}
+
+.inputBx input[type="file"]::-webkit-file-upload-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-family: 'MyFont', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.inputBx input[type="file"]::-webkit-file-upload-button:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.form-help {
+    color: rgba(203, 213, 225, 0.7);
+    font-size: 0.85em;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.service-help {
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    animation: fadeIn 0.3s ease;
+}
+
+.service-help h6 {
+    color: #f8fafc;
+    margin-bottom: 15px;
+    font-size: 1em;
+}
+
+.service-help ul {
+    margin-bottom: 0;
+    padding-right: 20px;
+}
+
+.service-help li {
+    color: rgba(248, 250, 252, 0.9);
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.service-help strong {
+    color: #6366f1;
+}
+
+.location-card {
+    background: rgba(30, 41, 59, 0.3);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.location-card h6 {
+    color: #f8fafc;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.location-note {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 15px;
+    color: #fbbf24;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design for Maintenance Form */
+@media (max-width: 991.98px) {
+    .maintenance-form {
+        padding: 25px 20px;
+    }
+    
+    .info-grid {
+        gap: 12px;
+    }
+    
+    .student-info-box {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .maintenance-form {
+        padding: 20px 15px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.5em;
+    }
+    
+    .inputBx textarea {
+        min-height: 80px;
+        padding: 12px 15px;
+    }
+    
+    .inputBx select,
+    .inputBx input[type="file"] {
+        padding: 12px 15px;
+        font-size: 0.9em;
+    }
+    
+    .service-help {
+        padding: 15px;
+    }
+    
+    .location-card {
+        padding: 15px;
+    }
+    
+    .user-info {
+        text-align: center;
+    }
+    
+    .user-info .d-flex {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .maintenance-form {
+        padding: 15px 10px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.3em;
+    }
+    
+    .student-info-box {
+        padding: 12px;
+    }
+    
+    .info-grid div {
+        font-size: 0.9em;
+    }
+    
+    .service-help {
+        padding: 12px;
+    }
+    
+    .service-help li {
+        font-size: 0.85em;
+    }
+    
+    .location-card {
+        padding: 12px;
+    }
+    
+    .location-note {
+        font-size: 0.85em;
+        padding: 10px;
+    }
+}
+
+/* RTL specific adjustments for file input */
+[dir="rtl"] .inputBx input[type="file"]::-webkit-file-upload-button {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+/* RTL specific adjustments for select arrows */
+[dir="rtl"] .inputBx select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8fafc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 15px center;
+    background-size: 16px;
+    padding-left: 45px;
+}
+
+/* Autofill styles for new form elements */
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    -webkit-text-fill-color: #f8fafc !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(30, 41, 59, 0.8) inset;
+    transition: background-color 5000s ease-in-out 0s;
+    border-radius: 12px;
+}
