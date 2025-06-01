@@ -14,20 +14,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from tkinter.font import names
+
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path,include
 from django.conf.urls.static import static
 import os
+from . import views
 
-def home_redirect(request):
-    """Redirect root URL to student login page"""
-    return redirect('/login')
+# def home_redirect(request):
+#     """Redirect root URL to student login page"""
+#     return redirect('/home')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('student.urls')),
     path('expert/', include('services.urls')),
-
+    path('home/',views.home, name='home'),
+    path('api/experts/', views.get_experts_api, name='experts_api'),
+    path('api/services/', views.get_services_api, name='services_api'),
+    path('api/stats/', views.get_stats_api, name='stats_api'),
 ]
 urlpatterns += static('/media/', document_root=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'media'))
