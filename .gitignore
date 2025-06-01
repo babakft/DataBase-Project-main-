@@ -1,2 +1,23 @@
+# IDE and editor settings
+.idea/
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# Build and dependency folders
+node_modules/
+dist/
+build/
+
+# Custom folders to ignore
 static/
 vdb/
