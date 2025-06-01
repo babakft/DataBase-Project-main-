@@ -2,7 +2,7 @@ SECRET_KEY = 'django-insecure-^#s!gz&$4lzj&px=9yn=e55727dnyfmxs%(r%z-me(glsb$s1*
 
 DEBUG = True
 
-DB_NAME = 'project'
+DB_NAME = 'postgres'
 DB_USER = 'postgres'
 DB_PASS = 'Babakft82#'
 DB_HOST = 'localhost'

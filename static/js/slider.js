@@ -1,120 +1,110 @@
-// Image Slider Functionality
-let slideIndex = 1;
-let slideInterval;
+// static/js/slider.js
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+const totalSlides = slides.length;
 
-// Initialize slider
-document.addEventListener('DOMContentLoaded', function() {
-    showSlide(slideIndex);
-    startAutoSlide();
-});
-
-function changeSlide(n) {
-    showSlide(slideIndex += n);
-    resetAutoSlide();
-}
-
-function currentSlide(n) {
-    showSlide(slideIndex = n);
-    resetAutoSlide();
-}
-
-function showSlide(n) {
-    const slides = document.getElementsByClassName('slide');
-    const dots = document.getElementsByClassName('dot');
-
-    if (n > slides.length) {
-        slideIndex = 1;
-    }
-    if (n < 1) {
-        slideIndex = slides.length;
-    }
-
+function showSlide(index) {
     // Hide all slides
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].classList.remove('active');
-    }
-
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+    });
+    
     // Remove active class from all dots
-    for (let i = 0; i < dots.length; i++) {
-        dots[i].classList.remove('active');
+    dots.forEach(dot => {
+        dot.classList.remove('active');
+    });
+    
+    // Show current slide
+    if (slides[index]) {
+        slides[index].classList.add('active');
     }
-
-    // Show current slide and activate corresponding dot
-    if (slides[slideIndex - 1]) {
-        slides[slideIndex - 1].classList.add('active');
-    }
-    if (dots[slideIndex - 1]) {
-        dots[slideIndex - 1].classList.add('active');
+    
+    // Activate current dot
+    if (dots[index]) {
+        dots[index].classList.add('active');
     }
 }
 
 function nextSlide() {
-    changeSlide(1);
+    currentSlide = (currentSlide + 1) % totalSlides;
+    showSlide(currentSlide);
 }
 
-function startAutoSlide() {
-    slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+function prevSlide() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    showSlide(currentSlide);
 }
 
-function resetAutoSlide() {
-    clearInterval(slideInterval);
-    startAutoSlide();
+function changeSlide(direction) {
+    if (direction === 1) {
+        nextSlide();
+    } else {
+        prevSlide();
+    }
 }
 
-// Pause auto-slide on hover
+function currentSlideIndex(index) {
+    currentSlide = index - 1;
+    showSlide(currentSlide);
+}
+
+// Auto-play functionality
+let autoPlayInterval;
+
+function startAutoPlay() {
+    autoPlayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+}
+
+function stopAutoPlay() {
+    clearInterval(autoPlayInterval);
+}
+
+// Initialize slider when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    const sliderContainer = document.querySelector('.slider-container');
-
-    if (sliderContainer) {
-        sliderContainer.addEventListener('mouseenter', function() {
-            clearInterval(slideInterval);
-        });
-
-        sliderContainer.addEventListener('mouseleave', function() {
-            startAutoSlide();
-        });
+    if (slides.length > 0) {
+        showSlide(0);
+        startAutoPlay();
+        
+        // Pause auto-play on hover
+        const sliderContainer = document.querySelector('.slider-container');
+        if (sliderContainer) {
+            sliderContainer.addEventListener('mouseenter', stopAutoPlay);
+            sliderContainer.addEventListener('mouseleave', startAutoPlay);
+        }
     }
 });
 
 // Keyboard navigation
 document.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft') {
-        changeSlide(-1);
+        prevSlide();
     } else if (e.key === 'ArrowRight') {
-        changeSlide(1);
+        nextSlide();
     }
 });
 
-// Touch/swipe support for mobile
+// Touch/Swipe support for mobile
 let touchStartX = 0;
 let touchEndX = 0;
 
-document.addEventListener('DOMContentLoaded', function() {
-    const sliderContainer = document.querySelector('.slider-container');
-
-    if (sliderContainer) {
-        sliderContainer.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        sliderContainer.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
+function handleTouch() {
+    if (touchEndX < touchStartX - 50) {
+        nextSlide();
     }
-});
-
-function handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = touchStartX - touchEndX;
-
-    if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-            // Swipe left (next slide in RTL)
-            changeSlide(-1);
-        } else {
-            // Swipe right (previous slide in RTL)
-            changeSlide(1);
-        }
+    if (touchEndX > touchStartX + 50) {
+        prevSlide();
     }
+}
+
+const sliderContainer = document.querySelector('.slider-container');
+if (sliderContainer) {
+    sliderContainer.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    sliderContainer.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleTouch();
+    });
 }
