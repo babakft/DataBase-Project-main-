@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم مدیریت تعمیرات - دانشگاه شهید باهنر کرمان</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+</head>
+<body>
+    <div class="background-bullets">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-university"></i>
+                سیستم تعمیرات دانشگاه
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">صفحه اصلی</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">خدمات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experts">کارشناسان</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">گالری</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">تماس</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="dropdown me-2">
+                        <button class="btn btn-login dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-sign-in-alt"></i> ورود
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'student:student_login' %}">ورود دانشجویی</a></li>
+                            <li><a class="dropdown-item" href="{% url 'services:expert_login' %}">ورود کارشناسان</a></li>
+                            <li><a class="dropdown-item" href="/admin/">ورود مدیریت</a></li>
+                        </ul>
+                    </div>
+                    <a href="{% url 'student:student_registration' %}" class="btn btn-signup">
+                        <i class="fas fa-user-plus"></i> ثبت نام
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="hero-content">
+                        <h1 class="hero-title">سیستم مدیریت تعمیرات</h1>
+                        <p class="hero-subtitle">
+                            پلتفرم هوشمند برای مدیریت درخواست‌های تعمیرات و نگهداری دانشگاه شهید باهنر کرمان
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="{% url 'student:student_login' %}" class="btn-hero btn-hero-primary">
+                                <i class="fas fa-tools"></i> درخواست تعمیرات
+                            </a>
+                            <a href="#services" class="btn-hero btn-hero-secondary">
+                                <i class="fas fa-info-circle"></i> بیشتر بدانید
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <h2 class="section-title">خدمات ما</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="service-title">برق و روشنایی</h3>
+                        <p class="service-description">
+                            تعمیر و نگهداری سیستم‌های برقی، کلیدها، پریزها و تجهیزات روشنایی
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-faucet"></i>
+                        </div>
+                        <h3 class="service-title">لوله‌کشی و آب</h3>
+                        <p class="service-description">
+                            رفع نشتی، تعمیر شیرآلات، رفع گرفتگی و سایر مشکلات لوله‌کشی
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <h3 class="service-title">تهویه مطبوع</h3>
+                        <p class="service-description">
+                            تعمیر و سرویس کولرها، سیستم‌های گرمایش و تهویه هوا
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <h3 class="service-title">نجاری و تعمیرات</h3>
+                        <p class="service-description">
+                            تعمیر درب و پنجره، مبلمان، کابینت و سایر کارهای نجاری
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <h3 class="service-title">نظافت و بهداشت</h3>
+                        <p class="service-description">
+                            خدمات نظافت عمومی، ضدعفونی و مدیریت زباله
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="service-title">امنیت و نظارت</h3>
+                        <p class="service-description">
+                            تعمیر سیستم‌های امنیتی، دوربین‌ها و کنترل دسترسی
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experts Section -->
+    <section id="experts" class="experts-section">
+        <div class="container">
+            <h2 class="section-title">تیم کارشناسان ما</h2>
+            <div class="row g-4" id="expertsApp">
+                <div class="col-lg-3 col-md-6" v-for="expert in experts" :key="expert.id">
+                    <div class="expert-card">
+                        <div class="expert-avatar">
+                            <i :class="expert.icon"></i>
+                        </div>
+                        <h4 class="expert-name">{{ expert.name }}</h4>
+                        <p class="expert-specialty">{{ expert.specialty }}</p>
+                        <div class="rating">
+                            <i v-for="star in 5" :key="star"
+                               :class="star <= expert.rating ? 'fas fa-star' : 'far fa-star'"></i>
+                        </div>
+                        <div class="expert-stats">
+                            <div class="stat">
+                                <div class="stat-number">{{ expert.completed }}</div>
+                                <div class="stat-label">تکمیل شده</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">{{ expert.experience }}</div>
+                                <div class="stat-label">سال تجربه</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Slider Section -->
+    <section id="gallery" class="slider-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white; margin-bottom: 3rem;">گالری پروژه‌ها</h2>
+            <div class="slider-container">
+                <div class="slide active">
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1000&h=400&fit=crop" alt="تعمیرات برق">
+                    <div class="slide-content">
+                        <h3 class="slide-title">تعمیرات برقی</h3>
+                        <p class="slide-description">تعمیر و بهسازی سیستم‌های برقی خوابگاه‌های دانشجویی</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1558618047-fd0c3c6a9ad1?w=1000&h=400&fit=crop" alt="لوله کشی">
+                    <div class="slide-content">
+                        <h3 class="slide-title">سیستم لوله‌کشی</h3>
+                        <p class="slide-description">بازسازی و بهسازی شبکه آب و فاضلاب</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1000&h=400&fit=crop" alt="نجاری">
+                    <div class="slide-content">
+                        <h3 class="slide-title">کارهای نجاری</h3>
+                        <p class="slide-description">ساخت و تعمیر مبلمان و تجهیزات چوبی</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1000&h=400&fit=crop" alt="تهویه">
+                    <div class="slide-content">
+                        <h3 class="slide-title">سیستم تهویه</h3>
+                        <p class="slide-description">نصب و تعمیر سیستم‌های تهویه مطبوع</p>
+                    </div>
+                </div>
+            </div>
+            <button class="slider-nav prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="slider-nav next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="slider-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h4 style="color: #f8fafc; margin-bottom: 1rem;">دانشگاه شهید باهنر کرمان</h4>
+                <p>سیستم مدیریت تعمیرات و نگهداری</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <p style="margin-top: 2rem; border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 2rem;">
+                    تمامی حقوق مادی و معنوی این وبسایت متعلق به دانشگاه شهید باهنر کرمان می‌باشد.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="{% static 'js/slider.js' %}"></script>
+    <script src="{% static 'js/experts.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
