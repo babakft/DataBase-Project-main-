@@ -1,25 +1,71 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Work - {{ request.title }}</title>
+    <title>تکمیل کار - {{ request.title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
 </head>
-<body class="bg-light">
-    <div class="container mt-4">
+<body>
+    <!-- Background Animation -->
+    <div class="background-bullets">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-university"></i>
+                سیستم تعمیرات دانشگاه
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'services:expert_dashboard' %}">داشبورد کارشناسان</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">صفحه اصلی</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="navbar-text me-3">
+                        {{ expert.expert_name }} ({{ expert.get_specialization_display }})
+                    </span>
+                    <a href="{% url 'services:expert_logout' %}" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-sign-out-alt"></i> خروج
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 pt-5">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <!-- Header -->
-                <div class="card shadow mb-4">
+                <div class="card bg-glass shadow mb-4 completion-header">
                     <div class="card-header bg-success text-white">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">
-                                <i class="fas fa-check-circle"></i> Complete Work Assignment
+                                <i class="fas fa-check-circle"></i> تکمیل کار تعمیراتی
                             </h4>
                             <div>
                                 <a href="{% url 'services:expert_dashboard' %}" class="btn btn-outline-light btn-sm">
-                                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                                    <i class="fas fa-arrow-right"></i> بازگشت به داشبورد
                                 </a>
                             </div>
                         </div>
@@ -27,20 +73,20 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <h6><i class="fas fa-user"></i> Expert Information</h6>
-                                <p><strong>Name:</strong> {{ expert.expert_name }}</p>
-                                <p><strong>Specialization:</strong> {{ expert.get_specialization_display }}</p>
+                                <h6 class="text-white"><i class="fas fa-user text-success"></i> اطلاعات کارشناس</h6>
+                                <p class="text-light"><strong>نام:</strong> {{ expert.expert_name }}</p>
+                                <p class="text-light"><strong>تخصص:</strong> {{ expert.get_specialization_display }}</p>
                             </div>
                             <div class="col-md-4">
-                                <h6><i class="fas fa-calendar"></i> Timeline</h6>
-                                <p><strong>Assigned:</strong> {{ request.assigned_at|date:"M d, Y H:i" }}</p>
+                                <h6 class="text-white"><i class="fas fa-calendar text-info"></i> زمان‌بندی</h6>
+                                <p class="text-light"><strong>تخصیص:</strong> {{ request.assigned_at|date:"Y/m/d H:i" }}</p>
                                 {% if request.work_started_at %}
-                                    <p><strong>Work Started:</strong> {{ request.work_started_at|date:"M d, Y H:i" }}</p>
+                                    <p class="text-light"><strong>شروع کار:</strong> {{ request.work_started_at|date:"Y/m/d H:i" }}</p>
                                 {% endif %}
                             </div>
                             <div class="col-md-4">
-                                <h6><i class="fas fa-info-circle"></i> Status</h6>
-                                <p><strong>Current Status:</strong> <span class="badge bg-warning text-dark">{{ request.get_status_display }}</span></p>
+                                <h6 class="text-white"><i class="fas fa-info-circle text-warning"></i> وضعیت</h6>
+                                <p class="text-light"><strong>وضعیت فعلی:</strong> <span class="badge bg-warning text-dark">{{ request.get_status_display }}</span></p>
                             </div>
                         </div>
                     </div>
@@ -49,42 +95,43 @@
                 <!-- Messages -->
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show custom-alert" role="alert">
+                            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     {% endfor %}
                 {% endif %}
 
-                <!-- Request Summary -->
-                <div class="card shadow mb-4">
+                <!-- Work Summary -->
+                <div class="card bg-glass shadow mb-4 work-summary">
                     <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="fas fa-clipboard-list"></i> Work Summary</h5>
+                        <h5 class="mb-0"><i class="fas fa-clipboard-list"></i> خلاصه کار انجام شده</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <h6><i class="fas fa-tools"></i> Original Request</h6>
-                                <p><strong>Title:</strong> {{ request.title }}</p>
-                                <p><strong>Description:</strong> {{ request.description }}</p>
-                                <p><strong>Location:</strong> {{ request.full_location }}</p>
-                                <p><strong>Student:</strong> {{ request.student.student_name }} ({{ request.student.student_number }})</p>
+                                <h6 class="text-white"><i class="fas fa-tools text-primary"></i> درخواست اصلی</h6>
+                                <p class="text-light"><strong>عنوان:</strong> {{ request.title }}</p>
+                                <p class="text-light"><strong>شرح:</strong> {{ request.description }}</p>
+                                <p class="text-light"><strong>مکان:</strong> {{ request.full_location }}</p>
+                                <p class="text-light"><strong>دانشجو:</strong> {{ request.student.student_name }} ({{ request.student.student_number }})</p>
                             </div>
                             <div class="col-md-6">
                                 {% if request.expert_notes %}
-                                    <h6><i class="fas fa-sticky-note"></i> Your Previous Notes</h6>
-                                    <div class="alert alert-light border">
+                                    <h6 class="text-white"><i class="fas fa-sticky-note text-warning"></i> یادداشت‌های قبلی شما</h6>
+                                    <div class="alert alert-info border previous-notes">
                                         {{ request.expert_notes|linebreaks }}
                                     </div>
                                 {% endif %}
 
                                 {% if request.work_in_progress_image %}
-                                    <h6><i class="fas fa-camera"></i> Work Progress Photo</h6>
-                                    <div class="text-center">
+                                    <h6 class="text-white"><i class="fas fa-camera text-success"></i> تصویر پیشرفت کار</h6>
+                                    <div class="text-center progress-image-container">
                                         <img src="{{ request.work_in_progress_image.url }}"
-                                             class="img-fluid rounded border"
-                                             style="max-height: 200px;"
-                                             alt="Work Progress Photo">
+                                             class="img-fluid rounded border progress-image"
+                                             style="max-height: 200px; object-fit: cover;"
+                                             alt="تصویر پیشرفت کار">
                                     </div>
                                 {% endif %}
                             </div>
@@ -92,95 +139,107 @@
                     </div>
                 </div>
 
-                <!-- Issue Photo Reference -->
+                <!-- Original Issue Photo Reference -->
                 {% if request.issue_image %}
-                <div class="card shadow mb-4">
+                <div class="card bg-glass shadow mb-4 issue-photo-card">
                     <div class="card-header bg-secondary text-white">
-                        <h6 class="mb-0"><i class="fas fa-image"></i> Original Issue Photo</h6>
+                        <h6 class="mb-0"><i class="fas fa-image"></i> تصویر مشکل اولیه</h6>
                     </div>
                     <div class="card-body text-center">
-                        <img src="{{ request.issue_image.url }}"
-                             class="img-fluid rounded border"
-                             style="max-height: 300px;"
-                             alt="Original Issue Photo">
-                        <br>
-                        <a href="{{ request.issue_image.url }}"
-                           target="_blank"
-                           class="btn btn-outline-secondary btn-sm mt-2">
-                            <i class="fas fa-expand"></i> View Full Size
-                        </a>
+                        <div class="original-image-container">
+                            <img src="{{ request.issue_image.url }}"
+                                 class="img-fluid rounded border original-image"
+                                 style="max-height: 300px; object-fit: cover;"
+                                 alt="تصویر مشکل اولیه">
+                            <br>
+                            <a href="{{ request.issue_image.url }}"
+                               target="_blank"
+                               class="btn btn-outline-secondary btn-sm mt-2">
+                                <i class="fas fa-expand"></i> مشاهده تمام صفحه
+                            </a>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
 
                 <!-- Completion Form -->
-                <div class="card shadow">
+                <div class="card bg-glass shadow completion-form-card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="fas fa-check-double"></i> Mark Work as Completed</h5>
+                        <h5 class="mb-0"><i class="fas fa-check-double"></i> علامت‌گذاری کار به عنوان تکمیل شده</h5>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-success">
+                        <div class="alert alert-success custom-success">
                             <i class="fas fa-check-circle"></i>
-                            <strong>Final Step:</strong> Complete this form to mark the work as finished.
-                            The student will be notified and can provide feedback on your work.
+                            <strong>مرحله نهایی:</strong> این فرم را تکمیل کنید تا کار به عنوان انجام شده علامت‌گذاری شود.
+                            دانشجو مطلع خواهد شد و می‌تواند درباره کار شما بازخورد ارائه دهد.
                         </div>
 
-                        <form method="post" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data" class="completion-form">
                             {% csrf_token %}
 
                             <div class="mb-4">
-                                <label for="{{ form.completion_image.id_for_label }}" class="form-label">
-                                    <i class="fas fa-camera"></i> {{ form.completion_image.label }}
+                                <label for="{{ form.completion_image.id_for_label }}" class="form-label text-white">
+                                    <i class="fas fa-camera text-success"></i> {{ form.completion_image.label }}
                                 </label>
-                                {{ form.completion_image }}
+                                <div class="file-input-container completion-file">
+                                    {{ form.completion_image }}
+                                    <div class="file-upload-info">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span>تصویر تکمیل کار را انتخاب کنید</span>
+                                    </div>
+                                </div>
                                 {% if form.completion_image.errors %}
-                                    <div class="text-danger">{{ form.completion_image.errors.0 }}</div>
+                                    <div class="text-danger mt-2">{{ form.completion_image.errors.0 }}</div>
                                 {% endif %}
-                                <div class="form-text">{{ form.completion_image.help_text }}</div>
+                                <div class="form-text text-light">{{ form.completion_image.help_text }}</div>
                             </div>
 
                             <div class="mb-4">
-                                <label for="{{ form.completion_notes.id_for_label }}" class="form-label">
-                                    <i class="fas fa-file-alt"></i> {{ form.completion_notes.label }}
+                                <label for="{{ form.completion_notes.id_for_label }}" class="form-label text-white">
+                                    <i class="fas fa-file-alt text-primary"></i> {{ form.completion_notes.label }}
                                 </label>
                                 {{ form.completion_notes }}
                                 {% if form.completion_notes.errors %}
-                                    <div class="text-danger">{{ form.completion_notes.errors.0 }}</div>
+                                    <div class="text-danger mt-2">{{ form.completion_notes.errors.0 }}</div>
                                 {% endif %}
-                                <div class="form-text">{{ form.completion_notes.help_text }}</div>
+                                <div class="form-text text-light">{{ form.completion_notes.help_text }}</div>
                             </div>
 
                             <div class="mb-4">
-                                <label for="{{ form.additional_notes.id_for_label }}" class="form-label">
-                                    <i class="fas fa-plus-circle"></i> {{ form.additional_notes.label }}
+                                <label for="{{ form.additional_notes.id_for_label }}" class="form-label text-white">
+                                    <i class="fas fa-plus-circle text-info"></i> {{ form.additional_notes.label }}
                                 </label>
                                 {{ form.additional_notes }}
                                 {% if form.additional_notes.errors %}
-                                    <div class="text-danger">{{ form.additional_notes.errors.0 }}</div>
+                                    <div class="text-danger mt-2">{{ form.additional_notes.errors.0 }}</div>
                                 {% endif %}
-                                <div class="form-text">{{ form.additional_notes.help_text }}</div>
+                                <div class="form-text text-light">{{ form.additional_notes.help_text }}</div>
                             </div>
 
-                            <div class="alert alert-warning">
+                            <div class="alert alert-warning custom-warning">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                <strong>Important:</strong> Once you mark this work as completed:
-                                <ul class="mb-0 mt-2">
-                                    <li>The request status will change to "Completed"</li>
-                                    <li>The student will be notified</li>
-                                    <li>The student can rate and provide feedback on your work</li>
-                                    <li>This action cannot be undone</li>
+                                <strong>مهم:</strong> پس از علامت‌گذاری این کار به عنوان تکمیل شده:
+                                <ul class="mb-0 mt-2 warning-list">
+                                    <li>وضعیت درخواست به "تکمیل شده" تغییر خواهد یافت</li>
+                                    <li>دانشجو مطلع خواهد شد</li>
+                                    <li>دانشجو می‌تواند به کار شما امتیاز دهد و بازخورد ارائه کند</li>
+                                    <li>این عمل غیرقابل بازگشت است</li>
                                 </ul>
                             </div>
 
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="{% url 'services:expert_dashboard' %}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-times"></i> Cancel
+                            <div class="action-buttons d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{% url 'services:expert_dashboard' %}" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-times"></i> انصراف
                                 </a>
-                                <a href="{% url 'services:request_detail' request.id %}" class="btn btn-outline-info">
-                                    <i class="fas fa-eye"></i> View Details
+                                <a href="{% url 'services:request_detail' request.id %}" class="btn btn-outline-info btn-lg">
+                                    <i class="fas fa-eye"></i> مشاهده جزئیات
                                 </a>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-check-circle"></i> Mark as Completed
+                                <button type="submit" class="btn btn-success btn-lg complete-work-btn">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span class="btn-text">علامت‌گذاری به عنوان تکمیل شده</span>
+                                    <div class="btn-loading d-none">
+                                        <i class="fas fa-spinner fa-spin"></i> در حال پردازش...
+                                    </div>
                                 </button>
                             </div>
                         </form>
@@ -190,38 +249,608 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>دانشگاه شهید باهنر کرمان</h5>
+                        <p>سیستم مدیریت تعمیرات و نگهداری</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                            <a href="https://github.com/Mbn64" class="social-icon"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border-color: rgba(148, 163, 184, 0.2); margin: 2rem 0 1rem;">
+                <p style="text-align: center; margin: 0; opacity: 0.8;">
+                    تمامی حقوق مادی و معنوی این وبسایت متعلق به دانشگاه شهید باهنر کرمان می‌باشد.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-glass">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">
+                        <i class="fas fa-question-circle text-warning"></i>
+                        تایید تکمیل کار
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="confirmation-icon mb-3">
+                        <i class="fas fa-check-circle fa-4x text-success"></i>
+                    </div>
+                    <p class="text-light mb-3">آیا مطمئن هستید که می‌خواهید این کار را به عنوان تکمیل شده علامت‌گذاری کنید؟</p>
+                    <p class="text-warning small">این عمل غیرقابل بازگشت است!</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> انصراف
+                    </button>
+                    <button type="button" class="btn btn-success" id="confirmSubmission">
+                        <i class="fas fa-check"></i> بله، تکمیل شده
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 
     <script>
-        // Preview uploaded completion image
+        // Enhanced file upload with Persian messages
         document.getElementById('{{ form.completion_image.id_for_label }}').addEventListener('change', function(e) {
             const file = e.target.files[0];
+            const container = this.closest('.file-input-container');
+            const info = container.querySelector('.file-upload-info');
+
             if (file) {
-                // Check file size
+                // Check file size (5MB)
                 if (file.size > 5 * 1024 * 1024) {
-                    alert('File size must be less than 5MB');
+                    showAlert('حجم فایل باید کمتر از ۵ مگابایت باشد', 'error');
                     e.target.value = '';
                     return;
                 }
 
-                // Show file name
-                const fileName = file.name;
-                const label = this.nextElementSibling || this.parentNode.querySelector('.form-text');
-                if (label) {
-                    label.textContent = `Selected: ${fileName.length > 30 ? fileName.substring(0, 30) + '...' : fileName}`;
-                    label.className = 'form-text text-success';
+                // Check file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                if (!allowedTypes.includes(file.type)) {
+                    showAlert('فقط فایل‌های تصویری مجاز هستند (JPG, PNG, GIF, WebP)', 'error');
+                    e.target.value = '';
+                    return;
                 }
+
+                // Update UI
+                const fileName = file.name;
+                info.innerHTML = `
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>انتخاب شده: ${fileName.length > 30 ? fileName.substring(0, 30) + '...' : fileName}</span>
+                `;
+                info.classList.add('file-selected');
+
+                showAlert('تصویر تکمیل کار با موفقیت انتخاب شد', 'success');
+            } else {
+                info.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>تصویر تکمیل کار را انتخاب کنید</span>
+                `;
+                info.classList.remove('file-selected');
             }
         });
 
-        // Confirm before submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const confirmed = confirm('Are you sure you want to mark this work as completed? This action cannot be undone.');
-            if (!confirmed) {
-                e.preventDefault();
+        // Form submission with confirmation modal
+        document.querySelector('.completion-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Show confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            modal.show();
+        });
+
+        // Handle confirmation
+        document.getElementById('confirmSubmission').addEventListener('click', function() {
+            const form = document.querySelector('.completion-form');
+            const submitBtn = document.querySelector('.complete-work-btn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('confirmationModal')).hide();
+
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.classList.add('d-none');
+            btnLoading.classList.remove('d-none');
+
+            // Submit form after a brief delay
+            setTimeout(() => {
+                form.submit();
+            }, 1000);
+        });
+
+        // Custom alert function
+        function showAlert(message, type) {
+            const alertContainer = document.querySelector('.container .row .col-md-10');
+            const existingAlert = alertContainer.querySelector('.temp-alert');
+
+            if (existingAlert) {
+                existingAlert.remove();
             }
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show temp-alert custom-alert`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            alertContainer.insertBefore(alertDiv, alertContainer.firstChild);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Drag and drop functionality
+        const fileInput = document.getElementById('{{ form.completion_image.id_for_label }}');
+        const container = fileInput.closest('.file-input-container');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            container.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            container.classList.add('drag-over');
+        }
+
+        function unhighlight(e) {
+            container.classList.remove('drag-over');
+        }
+
+        container.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+        }
+
+        // Image preview enhancement
+        document.querySelectorAll('.progress-image, .original-image').forEach(img => {
+            img.addEventListener('click', function() {
+                const modal = document.createElement('div');
+                modal.className = 'image-preview-modal';
+                modal.innerHTML = `
+                    <div class="modal-backdrop">
+                        <div class="modal-content">
+                            <img src="${this.src}" alt="پیش‌نمایش تصویر">
+                            <button class="close-preview">&times;</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this || e.target.classList.contains('close-preview')) {
+                        this.remove();
+                    }
+                });
+            });
         });
     </script>
+
+    <style>
+        /* Page specific animations */
+        .completion-header {
+            animation: slideInDown 0.6s ease-out;
+        }
+
+        .work-summary {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .issue-photo-card {
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        .completion-form-card {
+            animation: slideInUp 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Enhanced card effects */
+        .card.bg-glass:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        /* Custom alerts */
+        .custom-alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .custom-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .custom-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+
+        .warning-list {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .warning-list li {
+            position: relative;
+            padding-right: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-list li::before {
+            content: '⚠️';
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        /* Form styling */
+        .completion-form .form-control {
+            background: rgba(30, 41, 59, 0.7);
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px;
+            color: #f8fafc;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .completion-form .form-control:focus {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            color: #f8fafc;
+        }
+
+        .completion-form textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* File input styling */
+        .file-input-container.completion-file {
+            position: relative;
+            border: 2px dashed rgba(34, 197, 94, 0.4);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .file-input-container.completion-file:hover,
+        .file-input-container.completion-file.drag-over {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-info {
+            color: #22c55e;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-info.file-selected {
+            color: #16a34a;
+        }
+
+        .file-upload-info i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Image styling */
+        .progress-image, .original-image {
+            transition: transform 0.3s ease;
+            border: 3px solid rgba(148, 163, 184, 0.3) !important;
+            cursor: pointer;
+        }
+
+        .progress-image:hover, .original-image:hover {
+            transform: scale(1.05);
+        }
+
+        .progress-image-container, .original-image-container {
+            background: rgba(30, 41, 59, 0.3);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .previous-notes {
+            background: rgba(13, 202, 240, 0.1) !important;
+            border: 1px solid rgba(13, 202, 240, 0.3) !important;
+            color: #0dcaf0 !important;
+        }
+
+        /* Button enhancements */
+        .action-buttons .btn {
+            min-width: 160px;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 0.75rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .complete-work-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .complete-work-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+        }
+
+        .complete-work-btn:disabled {
+            opacity: 0.7;
+            transform: none;
+        }
+
+        .btn-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Modal styling */
+        .modal-content.bg-glass {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 20px;
+        }
+
+        .confirmation-icon {
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Image preview modal */
+        .image-preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-preview-modal .modal-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .image-preview-modal .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .image-preview-modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .close-preview {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-preview:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        /* Badge styling */
+        .badge {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .card-body .row .col-md-4,
+            .card-body .row .col-md-6 {
+                margin-bottom: 1.5rem;
+            }
+
+            .action-buttons {
+                gap: 1rem !important;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .file-input-container.completion-file {
+                padding: 1.5rem 1rem;
+            }
+
+            .navbar-text {
+                display: none;
+            }
+
+            .warning-list li {
+                font-size: 0.9rem;
+            }
+
+            .modal-content.bg-glass {
+                margin: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .completion-header .card-body .row {
+                text-align: center;
+            }
+
+            .completion-header .card-body .col-md-4 {
+                margin-bottom: 1rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .image-preview-modal .modal-content {
+                margin: 1rem;
+                padding: 0.5rem;
+            }
+        }
+
+        /* Persian text optimization */
+        .text-light, .text-white {
+            line-height: 1.8;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: all 0.3s ease;
+        }
+
+        /* Loading animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fa-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Success completion effect */
+        .completion-success {
+            animation: successPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); }
+        }
+    </style>
 </body>
 </html>

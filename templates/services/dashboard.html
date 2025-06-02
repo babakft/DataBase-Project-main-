@@ -4,320 +4,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد کارشناسان - سیستم تعمیرات</title>
+    <title>داشبورد کارشناسان - {{ expert.expert_name }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/components.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard-simple.css' %}">
 </head>
 <body>
-    <div class="background-bullets">
-        <span></span>
-        <span></span>
+    <!-- Background Animation -->
+    <div class="bg-animation">
         <span></span>
         <span></span>
         <span></span>
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-glass fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
-                <i class="fas fa-university"></i>
-                سیستم تعمیرات دانشگاه
+                <i class="fas fa-university text-primary"></i>
+                سیستم تعمیرات
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'services:expert_dashboard' %}">داشبورد</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">صفحه اصلی</a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <span class="navbar-text me-3">
-                        خوش آمدید، {{ expert.expert_name }} ({{ expert.get_specialization_display }})
-                    </span>
-                    <a href="{% url 'services:expert_logout' %}" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-sign-out-alt"></i> خروج
-                    </a>
-                </div>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ expert.expert_name }} - {{ expert.get_specialization_display }}</span>
+                <a href="{% url 'services:expert_logout' %}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container-fluid" style="padding-top: 100px;">
+    <!-- Main Container -->
+    <div class="main-container">
         <!-- Messages -->
         {% if messages %}
-            <div class="row mt-3">
-                <div class="col-12">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Header Section -->
+        <div class="dashboard-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="welcome-title">داشبورد کارشناسی</h1>
+                    <div class="user-info">
+                        <span><i class="fas fa-user-cog"></i> {{ expert.expert_name }}</span>
+                        <span><i class="fas fa-tools"></i> {{ expert.get_specialization_display }}</span>
+                        <span><i class="fas fa-id-card"></i> کد کارمندی: {{ expert.employee_id }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-tools"></i> عملیات سریع
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% if pending_requests %}
+                                {% for request in pending_requests|slice:":3" %}
+                                    <li><a class="dropdown-item" href="{% url 'services:request_detail' request.id %}">{{ request.title|truncatechars:30 }}</a></li>
+                                {% endfor %}
+                                {% if pending_count > 3 %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-center" href="#pending-section">مشاهده همه ({{ pending_count }})</a></li>
+                                {% endif %}
+                            {% else %}
+                                <li><span class="dropdown-item text-muted">درخواستی در انتظار نیست</span></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card stat-pending">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-info">
+                    <h3>{{ pending_count }}</h3>
+                    <p>در انتظار انجام</p>
+                </div>
+            </div>
+            <div class="stat-card stat-completed">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <h3>{{ completed_count }}</h3>
+                    <p>تکمیل شده</p>
+                </div>
+            </div>
+            <div class="stat-card stat-progress">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-info">
+                    <h3>{% if avg_rating %}{{ avg_rating|floatformat:1 }}{% else %}-{% endif %}</h3>
+                    <p>میانگین امتیاز</p>
+                </div>
+            </div>
+            <div class="stat-card stat-total">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-info">
+                    <h3>{{ completion_rate|default:0 }}%</h3>
+                    <p>نرخ تکمیل</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Section -->
+        <div class="requests-section" id="pending-section">
+            <div class="section-header">
+                <h4><i class="fas fa-list-ul"></i> درخواست‌های در انتظار انجام</h4>
+                <span class="badge bg-warning text-dark">{{ pending_count }} درخواست</span>
+            </div>
+
+            {% if pending_requests %}
+                <div class="requests-grid">
+                    {% for request in pending_requests %}
+                        <div class="request-card">
+                            <div class="request-header">
+                                <h5>{{ request.title }}</h5>
+                                <span class="status-badge {% if request.work_started_at %}status-in_progress{% else %}status-approved{% endif %}">
+                                    {% if request.work_started_at %}
+                                        کار شروع شده
+                                    {% else %}
+                                        آماده شروع
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="request-body">
+                                <p class="request-desc">{{ request.description|truncatechars:80 }}</p>
+                                <div class="request-meta">
+                                    <span><i class="fas fa-user-graduate"></i> {{ request.student.student_name }}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> {{ request.full_location }}</span>
+                                    <span><i class="fas fa-tag"></i> {{ request.get_service_type_display }}</span>
+                                    <span><i class="fas fa-calendar"></i> {{ request.created_at|date:"Y/m/d" }}</span>
+                                </div>
+                                {% if request.assigned_at %}
+                                    <div class="expert-info">
+                                        <i class="fas fa-clock"></i> تخصیص: {{ request.assigned_at|date:"Y/m/d H:i" }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="request-actions">
+                                <a href="{% url 'services:request_detail' request.id %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> مشاهده
+                                </a>
+                                {% if not request.work_started_at %}
+                                    <a href="{% url 'services:start_work' request.id %}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-play"></i> شروع کار
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'services:complete_work' request.id %}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-check"></i> تکمیل
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-        {% endif %}
-
-        <!-- Statistics Cards -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card stats-card stats-pending">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="stats-number">{{ pending_count }}</h4>
-                                <p class="stats-label">درخواست‌های در انتظار</p>
-                            </div>
-                            <div class="stats-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                        </div>
-                    </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-check fa-3x"></i>
+                    <h5>درخواست در انتظار وجود ندارد</h5>
+                    <p>همه کارها انجام شده! درخواست‌های جدید اینجا نمایش داده می‌شوند.</p>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stats-card stats-completed">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="stats-number">{{ completed_count }}</h4>
-                                <p class="stats-label">کل تکمیل شده</p>
-                            </div>
-                            <div class="stats-icon">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stats-card stats-total">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="stats-number">{{ expert.get_specialization_display }}</h4>
-                                <p class="stats-label">تخصص</p>
-                            </div>
-                            <div class="stats-icon">
-                                <i class="fas fa-wrench"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stats-card stats-progress">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="stats-number">{{ expert.employee_id }}</h4>
-                                <p class="stats-label">کد کارمندی</p>
-                            </div>
-                            <div class="stats-icon">
-                                <i class="fas fa-id-card"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Requests -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card requests-card">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="fas fa-list-ul"></i> کارهای در انتظار انجام ({{ pending_count }})
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        {% if pending_requests %}
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>درخواست</th>
-                                            <th>نوع خدمات</th>
-                                            <th>دانشجو</th>
-                                            <th>مکان</th>
-                                            <th>تاریخ تخصیص</th>
-                                            <th>وضعیت</th>
-                                            <th>عملیات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for request in pending_requests %}
-                                            <tr>
-                                                <td>
-                                                    <strong>{{ request.title }}</strong><br>
-                                                    <small class="text-muted">{{ request.description|truncatechars:60 }}</small>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-secondary">{{ request.get_service_type_display }}</span>
-                                                </td>
-                                                <td>
-                                                    {{ request.student.student_name }}<br>
-                                                    <small class="text-muted">{{ request.student.student_number }}</small>
-                                                </td>
-                                                <td>
-                                                    <i class="fas fa-map-marker-alt"></i> {{ request.full_location }}
-                                                </td>
-                                                <td>
-                                                    {% if request.assigned_at %}
-                                                        {{ request.assigned_at|date:"M d, Y H:i" }}
-                                                    {% else %}
-                                                        <span class="text-muted">تخصیص نشده</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    {% if request.work_started_at %}
-                                                        <span class="badge bg-info">کار شروع شده</span>
-                                                    {% else %}
-                                                        <span class="badge bg-warning text-dark">آماده شروع</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group btn-group-sm">
-                                                        <a href="{% url 'services:request_detail' request.id %}"
-                                                           class="btn btn-outline-primary">
-                                                            <i class="fas fa-eye"></i> مشاهده
-                                                        </a>
-                                                        {% if not request.work_started_at %}
-                                                            <a href="{% url 'services:start_work' request.id %}"
-                                                               class="btn btn-success">
-                                                                <i class="fas fa-play"></i> شروع
-                                                            </a>
-                                                        {% else %}
-                                                            <a href="{% url 'services:complete_work' request.id %}"
-                                                               class="btn btn-primary">
-                                                                <i class="fas fa-check"></i> تکمیل
-                                                            </a>
-                                                        {% endif %}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <div class="text-center py-5">
-                                <i class="fas fa-clipboard-check fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">درخواست در انتظار وجود ندارد</h5>
-                                <p class="text-muted">همه کارها انجام شده! درخواست‌های جدید اینجا نمایش داده می‌شوند.</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+            {% endif %}
         </div>
 
         <!-- Recently Completed Requests -->
-        <div class="row mt-4 mb-4">
-            <div class="col-12">
-                <div class="card requests-card">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="fas fa-history"></i> کارهای تکمیل شده اخیر
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        {% if completed_requests %}
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>درخواست</th>
-                                            <th>نوع خدمات</th>
-                                            <th>دانشجو</th>
-                                            <th>مکان</th>
-                                            <th>تاریخ تکمیل</th>
-                                            <th>امتیاز</th>
-                                            <th>عملیات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for request in completed_requests %}
-                                            <tr>
-                                                <td>
-                                                    <strong>{{ request.title }}</strong>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-secondary">{{ request.get_service_type_display }}</span>
-                                                </td>
-                                                <td>{{ request.student.student_name }}</td>
-                                                <td>{{ request.full_location }}</td>
-                                                <td>{{ request.completed_at|date:"M d, Y" }}</td>
-                                                <td>
-                                                    {% if request.student_rating %}
-                                                        <div class="text-warning">
-                                                            {% for i in "12345" %}
-                                                                {% if forloop.counter <= request.student_rating %}
-                                                                    <i class="fas fa-star"></i>
-                                                                {% else %}
-                                                                    <i class="far fa-star"></i>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </div>
-                                                    {% else %}
-                                                        <span class="text-muted">امتیازی ثبت نشده</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <a href="{% url 'services:request_detail' request.id %}"
-                                                       class="btn btn-outline-primary btn-sm">
-                                                        <i class="fas fa-eye"></i> مشاهده
-                                                    </a>
-                                                </td>
-                                            </tr>
+        {% if completed_requests %}
+        <div class="requests-section">
+            <div class="section-header">
+                <h4><i class="fas fa-history"></i> کارهای تکمیل شده اخیر</h4>
+                <a href="#" class="btn btn-outline-secondary btn-sm" onclick="toggleCompletedRequests()">
+                    <i class="fas fa-list"></i> مشاهده همه
+                </a>
+            </div>
+
+            <div class="requests-grid" id="completed-requests">
+                {% for request in completed_requests|slice:":6" %}
+                    <div class="request-card">
+                        <div class="request-header">
+                            <h5>{{ request.title }}</h5>
+                            <span class="status-badge status-completed">تکمیل شده</span>
+                        </div>
+                        <div class="request-body">
+                            <div class="request-meta">
+                                <span><i class="fas fa-user-graduate"></i> {{ request.student.student_name }}</span>
+                                <span><i class="fas fa-map-marker-alt"></i> {{ request.full_location }}</span>
+                                <span><i class="fas fa-calendar-check"></i> {{ request.completed_at|date:"Y/m/d" }}</span>
+                            </div>
+                            {% if request.student_rating %}
+                                <div class="rating-display">
+                                    <span class="rating-label">امتیاز:</span>
+                                    <div class="rating-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= request.student_rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
                                         {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <div class="text-center py-3">
-                                <i class="fas fa-clipboard-list fa-2x text-muted mb-2"></i>
-                                <p class="text-muted">هنوز کاری تکمیل نشده است</p>
-                            </div>
-                        {% endif %}
+                                        <span class="rating-number">({{ request.student_rating }}/5)</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="request-actions">
+                            <a href="{% url 'services:request_detail' request.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> مشاهده
+                            </a>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
+        {% endif %}
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <h4 style="color: #f8fafc; margin-bottom: 1rem;">دانشگاه شهید باهنر کرمان</h4>
-                <p>سیستم مدیریت تعمیرات و نگهداری</p>
-                <div class="social-icons">
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-                </div>
-                <p style="margin-top: 2rem; border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 2rem;">
-                    تمامی حقوق مادی و معنوی این وبسایت متعلق به دانشگاه شهید باهنر کرمان می‌باشد.
-                </p>
-            </div>
-        </div>
-    </footer>
-
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script>
+        function toggleCompletedRequests() {
+            // This could expand to show all completed requests
+            alert('قابلیت مشاهده همه درخواست‌های تکمیل شده');
+        }
+
+        // Add rating display styling
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingStars = document.querySelectorAll('.rating-stars');
+            ratingStars.forEach(rating => {
+                rating.style.color = '#fbbf24';
+                rating.style.fontSize = '0.9rem';
+            });
+        });
+
+        // Auto-refresh function (optional)
+        function autoRefresh() {
+            // Check for new requests every 2 minutes
+            setTimeout(() => {
+                location.reload();
+            }, 120000);
+        }
+
+        // Uncomment to enable auto-refresh
+        // autoRefresh();
+    </script>
+
+    <style>
+        .rating-display {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rating-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .rating-stars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .rating-number {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        .dropdown-menu {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+        }
+
+        .user-info span {
+            margin-left: 1.5rem;
+        }
+
+        .btn-group .dropdown-toggle {
+            border-radius: 25px;
+        }
+
+        @media (max-width: 767.98px) {
+            .user-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            .user-info span {
+                margin-left: 0;
+            }
+
+            .dashboard-header .col-md-4 {
+                margin-top: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
 </body>
 </html>
