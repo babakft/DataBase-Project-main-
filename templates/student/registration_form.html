@@ -74,6 +74,26 @@
                     <div class="login" id="registrationApp">
                         <h2 class="text-center mb-4">ثبت نام دانشجویی</h2>
 
+                        <!-- Messages - ADDED THIS SECTION -->
+                        {% if messages %}
+                        <div class="message-overlay" id="messageOverlay">
+                            <div class="message-animated-border active">
+                                {% for message in messages %}
+                                    <div class="message-log-content">
+                                        <span class="message-log-icon">
+                                            {% if message.tags == 'error' %}⚠️
+                                            {% elif message.tags == 'success' %}✅
+                                            {% elif message.tags == 'warning' %}⚠️
+                                            {% else %}ℹ️{% endif %}
+                                        </span>
+                                        <span class="message-log-text">{{ message }}</span>
+                                        <button type="button" class="message-log-close" onclick="closeMessageLog()">&times;</button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
                         <form method="post" ref="registrationForm" @submit="handleSubmit">
                             {% csrf_token %}
 
@@ -270,10 +290,63 @@
             },
 
             showError(message) {
-                alert(message);
+                // Close any existing message
+                this.closeMessageLog();
+
+                // Create new message overlay
+                const overlay = document.createElement('div');
+                overlay.classList.add('message-overlay');
+                overlay.id = 'messageOverlay';
+                overlay.innerHTML = `
+                    <div class="message-animated-border active">
+                        <div class="message-log-content">
+                            <span class="message-log-icon">⚠️</span>
+                            <span class="message-log-text">${message}</span>
+                            <button type="button" class="message-log-close" onclick="closeMessageLog()">&times;</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+
+                // Auto-close after 5 seconds
+                setTimeout(() => {
+                    this.closeMessageLog();
+                }, 5000);
+            },
+
+            closeMessageLog() {
+                const overlay = document.getElementById('messageOverlay');
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.remove();
+                    }, 300);
+                }
             }
         }
     });
+
+    // ADDED THESE FUNCTIONS FROM LOGIN.HTML
+    // Auto-close messages after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageOverlay = document.getElementById('messageOverlay');
+        if (messageOverlay) {
+            setTimeout(() => {
+                closeMessageLog();
+            }, 5000);
+        }
+    });
+
+    function closeMessageLog() {
+        const overlay = document.getElementById('messageOverlay');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+    }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

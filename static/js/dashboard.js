@@ -1,4 +1,4 @@
-// Dashboard JavaScript functionality
+
 
 document.addEventListener('DOMContentLoaded', function() {
     initDashboard();
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initDashboard() {
-    // Animate stats cards on load
+
     const statsCards = document.querySelectorAll('.stats-card');
     statsCards.forEach((card, index) => {
         card.style.opacity = '0';

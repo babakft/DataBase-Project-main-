@@ -18,7 +18,7 @@
         <span></span>
     </div>
 
-    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-glass fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
@@ -34,9 +34,9 @@
         </div>
     </nav>
 
-    <!-- Main Container -->
+
     <div class="main-container">
-        <!-- Messages -->
+
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show">

@@ -327,8 +327,7 @@ window.addEventListener('error', function(e) {
 // Service Worker registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-        navigator.serviceWorker.registeon
-dir('/static/js/sw.js')
+        navigator.serviceWorker.register('./sw.js')
             .then(function(registration) {
                 console.log('ServiceWorker registration successful');
             })

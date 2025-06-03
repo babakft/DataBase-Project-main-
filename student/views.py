@@ -259,3 +259,4 @@ def submit_feedback(request, request_id):
             return JsonResponse({'success': False, 'error': str(e)})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+

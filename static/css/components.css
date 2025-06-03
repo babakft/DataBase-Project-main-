@@ -1,4 +1,4 @@
-/* Form Components */
+
 .form-control {
     background: rgba(51, 65, 85, 0.6);
     border: 1px solid rgba(148, 163, 184, 0.3);
@@ -24,7 +24,7 @@
     margin-bottom: 0.5rem;
 }
 
-/* Modal Components */
+
 .modal-content {
     background: rgba(15, 23, 42, 0.95);
     border: 1px solid rgba(148, 163, 184, 0.2);
@@ -44,7 +44,7 @@
     filter: invert(1);
 }
 
-/* Dropdown Components */
+
 .dropdown-menu {
     background: rgba(15, 23, 42, 0.95);
     border: 1px solid rgba(148, 163, 184, 0.2);
@@ -62,7 +62,7 @@
     color: #6366f1;
 }
 
-/* Button Components */
+
 .btn-custom {
     border-radius: 25px;
     font-weight: 600;
